@@ -3,11 +3,17 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from webdriver_manager.microsoft import EdgeChromiumDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
+
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.edge.service import Service
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from time import sleep
 from urllib.parse import quote
 import os
-import pywhatkit
+
+from selenium.webdriver.edge.service import Service as EdgeService
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
 options = Options()
 options.add_experimental_option("excludeSwitches", ["enable-logging"])
@@ -61,7 +67,23 @@ total_number=len(numbers)
 print(style.RED + 'We found ' + str(total_number) + ' numbers in the file' + style.RESET)
 delay = 30
 
-driver = webdriver.Edge(EdgeChromiumDriverManager().install())
+
+
+# driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
+
+driver = webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()))
+
+# service = Service('C:/Users/firas/Downloads/edgedriver_win64/msedgedriver.exe')
+# capabilities = DesiredCapabilities.EDGE
+# driver = webdriver.Edge(service=service, desired_capabilities=capabilities, timeout=30)
+# driver = webdriver.Edge(executable_path='C:/Users/firas/Downloads/edgedriver_win64/msedgedriver.exe', capabilities=DesiredCapabilities.EDGE)
+
+# driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+
+# driver = webdriver.Edge(EdgeChromiumDriverManager().install())
+
+# driver = webdriver.Edge(executable_path='C:/Users/firas/Downloads/edgedriver_win64/msedgedriver.exe')
+
 print('Once your browser opens up sign in to web whatsapp')
 driver.get('https://web.whatsapp.com')
 input(style.MAGENTA + "AFTER logging into Whatsapp Web is complete and your chats are visible, press ENTER..." + style.RESET)
@@ -78,8 +100,10 @@ for idx, number in enumerate(numbers):
 				driver.get(url)
 				try:
 					click_plus = WebDriverWait(driver, delay).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='bo8jc6qi p4t1lx4y brjalhku']")))
-					sleep(5)
+				
 					click_btn = WebDriverWait(driver, delay).until(EC.element_to_be_clickable((By.XPATH, "//button[@data-tab='11']")))
+					
+					
 					
 
 				except Exception as e:
